@@ -3,6 +3,7 @@ package checkcves.model;
 import checkcves.model.osvdev.Vulnerability;
 import org.apache.maven.artifact.Artifact;
 
+import java.util.Comparator;
 import java.util.List;
 
 public record Violation(String groupId, String artifactId, String version, List<Vulnerability> vulns) {
@@ -46,6 +47,12 @@ public record Violation(String groupId, String artifactId, String version, List<
         if (vuln.database_specific() != null)
             return vuln.database_specific().getOrDefault("severity", "unknown").toString();
         return "unknown";
+    }
+
+    public static Comparator<Violation> newViolationComparator() {
+        return Comparator.comparing(Violation::groupId)
+                .thenComparing(Violation::artifactId)
+                .thenComparing(Violation::version);
     }
 
 }

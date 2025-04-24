@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.*;
 
+import static checkcves.model.Compliant.newCompliantComparator;
+import static checkcves.model.Violation.newViolationComparator;
 import static checkcves.util.Functions.*;
 import static java.net.http.HttpClient.newHttpClient;
 import static java.util.Collections.emptyList;
@@ -110,19 +112,19 @@ public final class MavenCheckCVEs extends AbstractMojo {
                 violations.add(new Violation(artifact, vulns));
         }
 
-        final var pluralArtifacts = artifacts.size() > 1 ? "s" : "";
-        final var pluralViolations = violations.size() > 1 ? "s" : "";
+        final var pluralArtifacts = artifacts.size() != 1 ? "s" : "";
+        final var pluralViolations = violations.size() != 1 ? "s" : "";
         log.info("Found " + artifacts.size() + " artifact" + pluralArtifacts +
                 " with " + violations.size() + " security violation" + pluralViolations + ".");
 
         if (printViolations && !violations.isEmpty()) {
-            for (final var violation : violations) {
+            for (final var violation : toSortedList(violations, newViolationComparator())) {
                 for (final var line : violation.toMessage(verbose).split("\n"))
                     log.warn(line);
             }
         }
         if (printCompliant && !compliant.isEmpty()) {
-            for (final var lib : compliant) {
+            for (final var lib : toSortedList(compliant, newCompliantComparator())) {
                 for (final var line : lib.toMessage().split("\n"))
                     log.info(line);
             }
@@ -133,6 +135,7 @@ public final class MavenCheckCVEs extends AbstractMojo {
 
     private static List<Vulnerability> filterExclusions(final List<Vulnerability> vulns, final Set<String> exclusions) {
         if (vulns == null) return emptyList();
+        if (exclusions == null) return vulns;
         return vulns.stream()
             .filter(vulnerability -> !exclusions.contains(vulnerability.id()))
             .toList();
