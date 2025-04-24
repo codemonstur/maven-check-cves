@@ -17,7 +17,7 @@ The plugin will run during the `validate` phase.
 <plugin>
     <groupId>com.github.codemonstur</groupId>
     <artifactId>maven-check-cves</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <executions>
         <execution><goals><goal>check</goal></goals></execution>
     </executions>
