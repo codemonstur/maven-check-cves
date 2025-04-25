@@ -1,4 +1,4 @@
-package checkcves.model;
+package checkcves.model.internal;
 
 import org.apache.maven.artifact.Artifact;
 
