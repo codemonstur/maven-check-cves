@@ -1,18 +1,19 @@
 package checkcves.util;
 
-import checkcves.model.Compliant;
-import checkcves.model.Violation;
 import com.google.gson.Gson;
 import httpclient.HttpCallRequest;
 import httpclient.Serializers;
 
 import java.net.http.HttpClient;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static httpclient.HeaderStrategy.SILENT_REMOVE_NULL_HEADERS;
+import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public enum Functions {;
@@ -33,6 +34,24 @@ public enum Functions {;
         final var list = new ArrayList<T>(set);
         list.sort(comparator);
         return list;
+    }
+
+    public static String encodeHex(final byte[] data) {
+        return Base64.getEncoder().encodeToString(data);
+    }
+    public static byte[] sha256(final String data, final Charset charset) {
+        return sha256(data.getBytes(charset));
+    }
+    public static byte[] sha256(final byte[] data) {
+        try {
+            return MessageDigest.getInstance("SHA-256").digest(data);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean isNewerThan(final Path path, final TimeUnit unit, final int duration) {
+        return path.toFile().lastModified() > (currentTimeMillis() - unit.toMillis(duration));
     }
 
 }
