@@ -1,0 +1,4 @@
+1.0.3
+
+Added thread safe setting
+Added local caching of results
