@@ -21,7 +21,7 @@ import static java.util.Collections.emptyList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 import static org.apache.maven.plugins.annotations.ResolutionScope.COMPILE_PLUS_RUNTIME;
 
-@Mojo( defaultPhase = VALIDATE, name = "check",
+@Mojo( defaultPhase = VALIDATE, name = "check", threadSafe = true,
        requiresDependencyCollection = COMPILE_PLUS_RUNTIME,
        requiresDependencyResolution = COMPILE_PLUS_RUNTIME )
 public final class Main extends MavenRepoMojo {
