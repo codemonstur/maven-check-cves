@@ -3,7 +3,7 @@
 
     <groupId>com.github.codemonstur</groupId>
     <artifactId>maven-check-cves</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -52,7 +52,7 @@
         <version.plugin.source>3.3.0</version.plugin.source>
         <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
         <version.plugin.license-check>1.0.0</version.plugin.license-check>
-        <version.plugin.check-cves>1.0.2</version.plugin.check-cves>
+        <version.plugin.check-cves>1.1.0</version.plugin.check-cves>
 
     </properties>
 
@@ -70,8 +70,6 @@
     </distributionManagement>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
-
         <plugins>
 
             <plugin>

@@ -2,7 +2,7 @@ include https://raw.githubusercontent.com/codemonstur/bobfiles/master/foss-lib-g
 
 vendor: com.github.codemonstur
 name: maven-check-cves
-version: 1.0.3
+version: 1.1.0
 release: 17
 description: A maven plugin for checking CVEs of dependencies
 license:
@@ -18,8 +18,6 @@ dependencies:
   - repository: org.apache.maven:maven-plugin-api:3.9.6
     scope: provided
   - repository: org.apache.maven.plugin-tools:maven-plugin-annotations:3.13.1
-    scope: provided
-  - repository: org.apache.maven:maven-project:3.0-alpha-2
     scope: provided
   - repository: com.google.code.gson:gson:2.14.0
   - repository: com.github.codemonstur:httpclient:1.2.2

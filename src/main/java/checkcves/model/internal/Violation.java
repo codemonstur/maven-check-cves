@@ -1,6 +1,7 @@
 package checkcves.model.internal;
 
 import checkcves.model.osvdev.Vulnerability;
+import checkcves.util.Versions;
 import org.apache.maven.artifact.Artifact;
 
 import java.util.Comparator;
@@ -21,7 +22,8 @@ public record Violation(String groupId, String artifactId, String version, List<
         }
 
         if (vulns.size() == 1) {
-            return "Found vulnerability for dependency " + groupId + ":" + artifactId + ":" + version + ":\n" + toDetailedMessage(vulns.get(0));
+            return "Found vulnerability for dependency " + groupId + ":" + artifactId + ":" + version + ":\n"
+                    + toDetailedMessage(vulns.get(0));
         }
         final var builder = new StringBuilder();
         builder.append("Found vulnerabilities for dependency ")
@@ -32,17 +34,19 @@ public record Violation(String groupId, String artifactId, String version, List<
         return builder.toString();
     }
 
-    private static String toDetailedMessage(final Vulnerability vuln) {
+    private String toDetailedMessage(final Vulnerability vuln) {
+        final var fixed = Versions.fixedVersions(vuln, groupId, artifactId, version);
         return
             " - id       : " + vuln.id() + "\n" +
             "   url      : " + "https://osv.dev/vulnerability/" + vuln.id() + "\n" +
             "   title    : " + vuln.summary() + "\n" +
             "   severity : " + toSeverity(vuln) + "\n" +
+            (fixed.isEmpty() ? "" : "   fixed in : " + String.join(", ", fixed) + "\n") +
             "   published: " + vuln.published() + "\n";
     }
 
     private static String toSeverity(final Vulnerability vuln) {
-        if (!vuln.severity().isEmpty())
+        if (vuln.severity() != null && !vuln.severity().isEmpty())
             return vuln.severity().get(0).score();
         if (vuln.database_specific() != null)
             return vuln.database_specific().getOrDefault("severity", "unknown").toString();

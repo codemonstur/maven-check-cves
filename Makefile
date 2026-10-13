@@ -1,9 +1,8 @@
 .PHONY: help clean build test check-versions release-notes deploy
 
-DATE=`date +'%F'`
 NAME=`xmllint --xpath "//project/artifactId/text()" pom.xml`
 VERSION=`xmllint --xpath "//project/version/text()" pom.xml`
-PREVIOUS_TAG=`git tag | sort -r | head -n 1`
+PREVIOUS_TAG=`git tag | sort -rV | head -n 1`
 
 help:
 	@echo "Available targets for $(NAME):"
@@ -41,7 +40,7 @@ deploy: build
 	@echo "[$(NAME)] Uploading to maven central"
 	@mvn clean deploy
 	@echo "[$(NAME)] Creating github release"
-	@hub release create -a target/$(NAME)-$(VERSION).jar -a target/$(NAME)-$(VERSION)-javadoc.jar -a target/$(NAME)-$(VERSION)-sources.jar -F src/docs/releases/release-$(VERSION).txt $(NAME)-$(VERSION)
+	@gh release create $(NAME)-$(VERSION) -a target/$(NAME)-$(VERSION).jar -a target/$(NAME)-$(VERSION)-javadoc.jar -a target/$(NAME)-$(VERSION)-sources.jar -F src/docs/releases/release-$(VERSION).txt
 	@echo "[$(NAME)] Tagging and pushing to github"
 	@git tag $(NAME)-$(VERSION)
 	@git push && git push --tags

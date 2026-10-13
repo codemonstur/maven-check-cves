@@ -1,0 +1,39 @@
+1.1.0
+
+New features:
+- Severity threshold: with minSeverity set (NONE/LOW/MODERATE/HIGH/CRITICAL) only findings of at
+  least that severity fail the build; lower findings are logged and reported separately
+- Structured suppressions: suppress by vulnerability id or alias, groupId and/or artifactId, with an
+  optional expiry date and note. Expired suppressions stop applying automatically
+- Report files: all findings can be written as json or sarif (for example for GitHub code scanning),
+  including suppressed and below-threshold findings
+- Offline mode: with offline enabled only cached results are used and the OSV service is never
+  contacted
+- Configurable cache: cacheDir and cacheTtlHours replace the hardcoded location and 24h lifetime
+- Every setting can be overridden from the command line, for example -Dcheckcves.enabled=false or
+  -Dcheckcves.minSeverity=CRITICAL
+- Violations now show the version that fixed each vulnerability ("fixed in : 1.31") in the log
+  output, the json report and the sarif report
+- Queries to the OSV service run in parallel, bounded by maxConcurrentQueries (default 4)
+- New includeSystemDependencies setting; system-scoped dependencies are no longer checked by default
+- Query results are cached locally and reused for 24 hours; a stale result is used when the service
+  is unreachable
+- The check goal is marked thread safe for parallel (mvn -T) builds
+
+Bug fixes:
+- Fixed random build failures caused by cache file names containing a path separator
+- Fixed a NullPointerException when a vulnerability has no severity information
+- Fixed unparsable or empty responses from the OSV service being cached as "no vulnerabilities"
+- Fixed the build hanging forever on a stalled connection: HTTP calls now have connect and request
+  timeouts, and timed-out calls are cancelled
+- Cache writes are now atomic and unreadable cache entries are refreshed automatically, so
+  parallel or interrupted builds cannot corrupt the cache
+- Fixed system-scoped and unknown-scoped dependencies bypassing the include* dependency settings
+- Exclusions now also match aliases, so CVE ids can be used to exclude GHSA findings
+- Malformed suppression configuration (bad expiry dates, rules without any criteria) now fails the
+  build with a clear message instead of an internal error
+
+Other:
+- Failures now name the dependency they occurred on
+- 70 unit tests
+- The github release step in the Makefile uses gh instead of the deprecated hub
