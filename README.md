@@ -1,6 +1,7 @@
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.codemonstur/maven-check-cves/badge.svg)](http://mvnrepository.com/artifact/com.github.codemonstur/maven-check-cves)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![GitHub Release](https://img.shields.io/github/v/release/codemonstur/maven-check-cves.svg)](https://github.com/codemonstur/maven-check-cves/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.codemonstur/maven-check-cves.svg)](https://central.sonatype.com/artifact/com.github.codemonstur/maven-check-cves)
+[![MIT Licence](https://img.shields.io/github/license/codemonstur/maven-check-cves)](LICENSE)
 
 ## Maven-check-cves
 
