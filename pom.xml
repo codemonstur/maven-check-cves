@@ -227,7 +227,7 @@
         </profile>
 
         <profile>
-            <id>security</id>
+            <id>vulnerabilities</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
