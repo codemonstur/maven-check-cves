@@ -72,8 +72,8 @@ The following settings can be used for the plugin:
 | failBuildOnViolation        | true          | If true will cause the build to fail if any dependency violates our rules                                  |
 | checkCodeDependencies       | true          | If true will include all code dependencies in the pom, including transitive dependencies                   |
 | checkPluginDependencies     | false         | If true will include all plugin dependencies in the pom                                                    |
-| includeCompileDependencies  | true          | If true will include all dependencies with the compile scope                                               |                            |
-| includeRuntimeDependencies  | true          | If true will include all dependencies with the runtime scope                                               | 
+| includeCompileDependencies  | true          | If true will include all dependencies with the compile scope                                               |
+| includeRuntimeDependencies  | true          | If true will include all dependencies with the runtime scope                                               |
 | includeProvidedDependencies | false         | If true will include all dependencies with the provided scope                                              |
 | includeTestDependencies     | false         | If true will include all dependencies with the test scope                                                  |
 | includeSystemDependencies   | false         | If true will include all dependencies with the system scope                                                |
