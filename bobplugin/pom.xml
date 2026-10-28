@@ -64,7 +64,6 @@
                         <phase>package</phase>
                         <goals><goal>shade</goal></goals>
                         <configuration>
-                            <finalName>${project.artifactId}</finalName>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>

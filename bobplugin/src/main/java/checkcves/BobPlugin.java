@@ -38,33 +38,6 @@ public enum BobPlugin {;
 
     public static int checkCVE(final Project project, final Map<String, String> environment, final String[] args)
             throws DependencyResolutionFailed, InvalidCommandLine, IOException {
-        final var cli = newCliParser(CliCheckCve::new).name("check-cve").parse(args);
-
-        final var cacheConfig = new OsvDevRepo.CacheConfig(
-            cli.offline,
-            java.nio.file.Paths.get(System.getProperty("user.home"), ".osvdev-repo"),
-            Duration.ofHours(cli.cacheTtlHours == 0 ? 24 : cli.cacheTtlHours));
-
-        int found = 0;
-        for (final var lib : DependencyResolution.listProjectDependencies(project)) {
-            if (isNullOrEmpty(lib.repository)) continue;
-            final var gav = lib.repository.split(":");
-            if (gav.length != 3) continue;
-
-            final var request = new OsvdevRequestBody(gav[2], new checkcves.model.osvdev.PPackage(gav[0] + ":" + gav[1], "Maven", null));
-            final var vulns = OsvDevRepo.findVulnerabilities(request, cacheConfig);
-            for (final var vuln : vulns) {
-                found++;
-                Log.logWarning("Vulnerability: " + vuln.id() + " in " + lib.repository);
-                if (!isNullOrEmpty(vuln.summary())) Log.logWarning("  " + vuln.summary());
-            }
-        }
-
-        if (found > 0) {
-            Log.logError("Found " + found + " vulnerabilities in project dependencies");
-        } else {
-            Log.logInfo("No vulnerabilities found");
-        }
-        return found > 0 ? 1 : 0;
+        return Cli.run(project, environment, args);
     }
 }

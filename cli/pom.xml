@@ -18,35 +18,13 @@
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
-            <artifactId>check-cves-bobplugin</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.github.codemonstur</groupId>
-                    <artifactId>check-cves-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.codemonstur</groupId>
-                    <artifactId>jcli</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.codemonstur</groupId>
-                    <artifactId>httpclient</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.errorprone</groupId>
-                    <artifactId>error_prone_annotations</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>check-cves-core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
             <artifactId>bobthebuildtool</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
