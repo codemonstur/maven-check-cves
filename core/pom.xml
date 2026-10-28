@@ -41,12 +41,6 @@
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
-            <artifactId>bobthebuildtool</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.codemonstur</groupId>
             <artifactId>jcli</artifactId>
         </dependency>
 
