@@ -18,13 +18,30 @@
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
-            <artifactId>check-cves-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.codemonstur</groupId>
             <artifactId>check-cves-bobplugin</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.codemonstur</groupId>
+                    <artifactId>check-cves-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.codemonstur</groupId>
+                    <artifactId>jcli</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.codemonstur</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.errorprone</groupId>
+                    <artifactId>error_prone_annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -45,18 +62,6 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Main-Class>checkcves.CliMain</Main-Class>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
@@ -64,7 +69,6 @@
                         <phase>package</phase>
                         <goals><goal>shade</goal></goals>
                         <configuration>
-                            <finalName>maven-check-cves-cli</finalName>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
