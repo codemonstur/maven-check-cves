@@ -36,7 +36,7 @@ public enum BobPlugin {;
         public int cacheTtlHours = 24;
     }
 
-    private static int checkCVE(final Project project, final Map<String, String> environment, final String[] args)
+    public static int checkCVE(final Project project, final Map<String, String> environment, final String[] args)
             throws DependencyResolutionFailed, InvalidCommandLine, IOException {
         final var cli = newCliParser(CliCheckCve::new).name("check-cve").parse(args);
 

@@ -106,6 +106,15 @@ public final class Main extends MavenRepoMojo {
     public void execute() throws MojoFailureException {
         if (!enabled) return;
 
+        // In a multi-module build, run the check only once, on the last module, aggregating every module there.
+        if (session != null && session.getProjects() != null && session.getProjects().size() > 1) {
+            final var lastProject = session.getProjects().get(session.getProjects().size() - 1);
+            if (lastProject == null || !project.getArtifactId().equals(lastProject.getArtifactId())) {
+                getLog().debug("Skipping CVE check on non-aggregating module " + project.getArtifactId());
+                return;
+            }
+        }
+
         final var log = getLog();
 
         try {

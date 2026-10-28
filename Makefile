@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 .PHONY: help clean build test validate release-notes deploy coverage
 
-NAME=`xmllint --xpath "//project/artifactId/text()" pom.xml`
+NAME=maven-check-cves
 VERSION=`xmllint --xpath "//project/version/text()" pom.xml`
 PREVIOUS_TAG=`git tag | sort -rV | head -n 1`
 
@@ -14,7 +14,7 @@ endif
 
 help: ## Show this help
 	@grep -hE '^[a-zA-Z0-9_.-]+:' $(MAKEFILE_LIST) | grep -vE '^[a-zA-Z0-9_.-]+:=' | \
-		awk 'BEGIN {FS = ":"} /^\./ {next} {name = $$1; sub(/[[:blank:]]+$$/, "", name); doc = $$0; sub(/^[^#]*## /, "", doc); if (doc == $$0) sub(/^[^:]*:[[:blank:]]*/, "", doc); printf "  \033[36m%-10s\033[0m %s\n", name, doc}'
+		awk 'BEGIN {FS = ":"} /^\./ {next} {name = $$1; sub(/[[:blank:]]+$$/, "", name); doc = $$0; sub(/^[^#]*## /, "", doc); if (doc == $$0) sub(/^[^:]*:[[:blank:]]*/, "", doc); printf "  \033[36m%-20s\033[0m %s\n", name, doc}'
 
 clean: ## Delete everything in ./target
 	@$(INFO) "Cleaning"
@@ -31,14 +31,15 @@ coverage: ## Run tests and generate a jacoco coverage report
 	@$(INFO) "Running tests and generating coverage report"
 	@mvn -Dstyle.color=always org.jacoco:jacoco-maven-plugin:0.8.15:prepare-agent test org.jacoco:jacoco-maven-plugin:0.8.15:report
 	@$(INFO) "Coverage report written to target/site/jacoco/index.html"
-	@output=$$(java src/build/CoverageSummary.java target/site/jacoco/jacoco.csv) || exit $$?; \
+	@output=$$(java src/build/CoverageSummary.java maven-check-cves-core/target/site/jacoco/jacoco.csv) || exit $$?; \
 	printf '%s\n' "$$output" | while IFS= read -r line; do $(INFO) "$$line"; done
 
 validate: ## Check dependency versions, cves, licenses, and code quality
-	@mvn versions:display-dependency-updates
+	@mvn com.github.codemonstur:maven-check-pom:1.0.0:check validate
+	@mvn com.github.codemonstur:maven-check-pom:1.0.0:reorder
+	@mvn versions:display-dependency-updates "-Dmaven.version.ignore=(?i).*(alpha|beta|rc|-m[0-9]+|snapshot).*"
 	@mvn versions:display-plugin-updates
-	@mvn validate -P vulnerabilities
-	@mvn validate -P licenses
+	@mvn verify -P vulnerabilities,licenses -DskipTests -T 1C
 	@mvn validate -P codequality
 
 release-notes: ## Write release notes in src/docs/releases for the current version
@@ -49,10 +50,26 @@ release-notes: ## Write release notes in src/docs/releases for the current versi
 	@git log --pretty="%s" $(PREVIOUS_TAG)... master >> src/docs/releases/release-$(VERSION).txt
 
 deploy: ## Clean, build and deploy a version to Github and Maven Central
-	@$(INFO) "Uploading to maven central"
-	@mvn clean deploy
+	@$(INFO) "Installing core (needed to build the plugin)"
+	@mvn -q -pl maven-check-cves-core clean install -DskipTests
+	@$(INFO) "Uploading maven-plugin to maven central"
+	@mvn -pl maven-check-cves-maven-plugin clean deploy
+	@$(INFO) "Building bobplugin for github release"
+	@mvn -q -pl maven-check-cves-bobplugin package
+	@$(INFO) "Building cli for github release"
+	@mvn -q -pl maven-check-cves-cli package
 	@$(INFO) "Creating github release"
-	@gh release create $(NAME)-$(VERSION) target/$(NAME)-$(VERSION).jar target/$(NAME)-$(VERSION)-javadoc.jar target/$(NAME)-$(VERSION)-sources.jar -F src/docs/releases/release-$(VERSION).txt
+	@gh release create $(NAME)-$(VERSION) \
+		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION).jar \
+		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION)-javadoc.jar \
+		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION)-sources.jar \
+		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin.jar \
+		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin-$(VERSION)-javadoc.jar \
+		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin-$(VERSION)-sources.jar \
+		maven-check-cves-cli/target/maven-check-cves-cli.jar \
+		maven-check-cves-cli/target/maven-check-cves-cli-$(VERSION)-javadoc.jar \
+		maven-check-cves-cli/target/maven-check-cves-cli-$(VERSION)-sources.jar \
+		-F src/docs/releases/release-$(VERSION).txt
 	@$(INFO) "Tagging and pushing to github"
 	@git tag $(NAME)-$(VERSION)
 	@git push && git push --tags

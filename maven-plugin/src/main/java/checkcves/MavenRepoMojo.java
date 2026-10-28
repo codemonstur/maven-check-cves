@@ -11,7 +11,9 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -28,13 +30,30 @@ public abstract class MavenRepoMojo extends AbstractMojo {
 
     protected Set<Artifact> loadCodeDependencies() {
         final var set = new HashSet<Artifact>();
-        set.addAll(project.getArtifacts());
-        set.addAll(project.getDependencyArtifacts());
+        for (final var moduleProject : projectsToCheck()) {
+            if (moduleProject.getArtifacts() != null) set.addAll(moduleProject.getArtifacts());
+            if (moduleProject.getDependencyArtifacts() != null) set.addAll(moduleProject.getDependencyArtifacts());
+        }
         return set.stream().filter(this::selectArtifacts).collect(toSet());
     }
 
     protected Set<Artifact> loadPluginDependencies() {
-        return project.getPluginArtifacts();
+        final var set = new HashSet<Artifact>();
+        for (final var moduleProject : projectsToCheck()) {
+            if (moduleProject.getPluginArtifacts() != null) set.addAll(moduleProject.getPluginArtifacts());
+        }
+        return set;
+    }
+
+    /**
+     * Returns the projects whose dependencies should be checked. In a multi-module build this is the full
+     * reactor; for a single module it is just the current project.
+     */
+    protected List<MavenProject> projectsToCheck() {
+        if (session != null && session.getProjects() != null && session.getProjects().size() > 1) {
+            return session.getProjects();
+        }
+        return List.of(project);
     }
 
     protected abstract boolean selectArtifacts(final Artifact artifact);
