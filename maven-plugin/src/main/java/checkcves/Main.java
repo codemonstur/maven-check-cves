@@ -9,6 +9,7 @@ import checkcves.model.internal.SuppressedFinding;
 import checkcves.model.internal.Suppression;
 import checkcves.model.internal.Violation;
 import checkcves.model.osvdev.OsvdevRequestBody;
+import checkcves.model.osvdev.PPackage;
 import checkcves.model.osvdev.Vulnerability;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoFailureException;
@@ -154,7 +155,8 @@ public final class Main extends MavenRepoMojo {
         // Phase 1: build the query bodies (local, sequential)
         final var queries = new ArrayList<Query>();
         for (final var artifact : artifacts)
-            queries.add(new Query(artifact, new OsvdevRequestBody(loadProjectFor(artifact))));
+            queries.add(new Query(artifact, new OsvdevRequestBody(artifact.getVersion(),
+                    new PPackage(artifact.getGroupId() + ":" + artifact.getArtifactId(), "Maven", null))));
 
         // Phase 2: query the OSV service (network, parallel with bounded concurrency)
         final var results = queryVulnerabilities(queries, cacheConfig);
@@ -193,9 +195,9 @@ public final class Main extends MavenRepoMojo {
             }
 
             if (notable.isEmpty())
-                compliant.add(new Compliant(artifact));
+                compliant.add(new Compliant(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
             else
-                violations.add(new Violation(artifact, notable));
+                violations.add(new Violation(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), notable));
         }
 
         final var pluralArtifacts = artifacts.size() != 1 ? "s" : "";

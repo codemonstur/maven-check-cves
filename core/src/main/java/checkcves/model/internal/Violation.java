@@ -2,15 +2,11 @@ package checkcves.model.internal;
 
 import checkcves.model.osvdev.Vulnerability;
 import checkcves.util.Versions;
-import org.apache.maven.artifact.Artifact;
 
 import java.util.Comparator;
 import java.util.List;
 
 public record Violation(String groupId, String artifactId, String version, List<Vulnerability> vulns) {
-    public Violation(final Artifact artifact, final List<Vulnerability> vulns) {
-        this(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), vulns);
-    }
 
     public String toMessage(final boolean verbose) {
         if (!verbose) {
