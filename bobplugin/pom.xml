@@ -24,11 +24,6 @@
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
-            <artifactId>jcli</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.codemonstur</groupId>
             <artifactId>check-cves-core</artifactId>
         </dependency>
 
