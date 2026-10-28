@@ -68,7 +68,7 @@ deploy: test ## Clean, build and deploy a version to Github and Maven Central
 		bobplugin/target/check-cves-bobplugin.jar \
 		bobplugin/target/check-cves-bobplugin-$(VERSION)-javadoc.jar \
 		bobplugin/target/check-cves-bobplugin-$(VERSION)-sources.jar \
-		cli/target/check-cves-cli.jar \
+		cli/target/maven-check-cves-cli.jar \
 		cli/target/check-cves-cli-$(VERSION)-javadoc.jar \
 		cli/target/check-cves-cli-$(VERSION)-sources.jar \
 		-F src/docs/releases/release-$(VERSION).txt
