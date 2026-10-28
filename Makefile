@@ -49,17 +49,17 @@ release-notes: ## Write release notes in src/docs/releases for the current versi
 	@echo "" >> src/docs/releases/release-$(VERSION).txt
 	@git log --pretty="%s" $(PREVIOUS_TAG)... master >> src/docs/releases/release-$(VERSION).txt
 
-deploy: ## Clean, build and deploy a version to Github and Maven Central
+deploy: test ## Clean, build and deploy a version to Github and Maven Central
 	@$(INFO) "Installing core (needed to build the plugin)"
-	@mvn -q -pl core -am clean install -DskipTests
+	@mvn -DskipTests -pl core -am clean install
 	@$(INFO) "Publishing core to maven central"
-	@mvn -q -pl core deploy -DskipTests
+	@mvn -DskipTests -pl core deploy
 	@$(INFO) "Uploading maven-plugin to maven central"
-	@mvn -pl maven-plugin clean deploy
+	@mvn -DskipTests -pl maven-plugin clean deploy
 	@$(INFO) "Building bobplugin for github release"
-	@mvn -q -pl bobplugin package
+	@mvn -DskipTests -pl bobplugin -am package
 	@$(INFO) "Building cli for github release"
-	@mvn -q -pl cli package
+	@mvn -DskipTests -pl cli -am package
 	@$(INFO) "Creating github release"
 	@gh release create $(NAME)-$(VERSION) \
 		maven-plugin/target/$(NAME)-$(VERSION).jar \
