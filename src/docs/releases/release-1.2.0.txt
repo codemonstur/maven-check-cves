@@ -1,0 +1,11 @@
+1.2.0
+
+Changes since maven-check-cves-1.1.0:
+- Make CVE checking multi-module aware
+- Build fixes, readme update
+- Create the release notes directory before writing the release notes
+- chore: commit pending local changes
+- chore: commit pending local changes
+- Add make coverage target with JaCoCo and coverage summary helper
+- Harmonized the build files
+- Build fixes, version updates
