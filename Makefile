@@ -57,18 +57,18 @@ deploy: test ## Clean, build and deploy a version to Github and Maven Central
 	@$(INFO) "Uploading maven-plugin to maven central"
 	@mvn -DskipTests -pl maven-plugin clean deploy
 	@$(INFO) "Building bobplugin for github release"
-	@mvn -DskipTests -pl bobplugin -am package
+	@mvn -DskipTests -pl bobplugin -am clean package
 	@$(INFO) "Building cli for github release"
-	@mvn -DskipTests -pl cli -am package
+	@mvn -DskipTests -pl cli -am clean package
 	@$(INFO) "Creating github release"
 	@gh release create $(NAME)-$(VERSION) \
 		maven-plugin/target/$(NAME)-$(VERSION).jar \
 		maven-plugin/target/$(NAME)-$(VERSION)-javadoc.jar \
 		maven-plugin/target/$(NAME)-$(VERSION)-sources.jar \
-		bobplugin/target/check-cves-bobplugin.jar \
+		bobplugin/target/check-cves-bobplugin-$(VERSION).jar \
 		bobplugin/target/check-cves-bobplugin-$(VERSION)-javadoc.jar \
 		bobplugin/target/check-cves-bobplugin-$(VERSION)-sources.jar \
-		cli/target/maven-check-cves-cli.jar \
+		cli/target/check-cves-cli-$(VERSION).jar \
 		cli/target/check-cves-cli-$(VERSION)-javadoc.jar \
 		cli/target/check-cves-cli-$(VERSION)-sources.jar \
 		-F src/docs/releases/release-$(VERSION).txt
