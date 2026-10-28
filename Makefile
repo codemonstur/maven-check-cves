@@ -51,24 +51,24 @@ release-notes: ## Write release notes in src/docs/releases for the current versi
 
 deploy: ## Clean, build and deploy a version to Github and Maven Central
 	@$(INFO) "Installing core (needed to build the plugin)"
-	@mvn -q -pl maven-check-cves-core clean install -DskipTests
+	@mvn -q -pl core clean install -DskipTests
 	@$(INFO) "Uploading maven-plugin to maven central"
-	@mvn -pl maven-check-cves-maven-plugin clean deploy
+	@mvn -pl maven-plugin clean deploy
 	@$(INFO) "Building bobplugin for github release"
-	@mvn -q -pl maven-check-cves-bobplugin package
+	@mvn -q -pl bobplugin package
 	@$(INFO) "Building cli for github release"
-	@mvn -q -pl maven-check-cves-cli package
+	@mvn -q -pl cli package
 	@$(INFO) "Creating github release"
 	@gh release create $(NAME)-$(VERSION) \
-		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION).jar \
-		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION)-javadoc.jar \
-		maven-check-cves-maven-plugin/target/$(NAME)-$(VERSION)-sources.jar \
-		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin.jar \
-		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin-$(VERSION)-javadoc.jar \
-		maven-check-cves-bobplugin/target/maven-check-cves-bobplugin-$(VERSION)-sources.jar \
-		maven-check-cves-cli/target/maven-check-cves-cli.jar \
-		maven-check-cves-cli/target/maven-check-cves-cli-$(VERSION)-javadoc.jar \
-		maven-check-cves-cli/target/maven-check-cves-cli-$(VERSION)-sources.jar \
+		maven-plugin/target/$(NAME)-$(VERSION).jar \
+		maven-plugin/target/$(NAME)-$(VERSION)-javadoc.jar \
+		maven-plugin/target/$(NAME)-$(VERSION)-sources.jar \
+		bobplugin/target/check-cves-bobplugin.jar \
+		bobplugin/target/check-cves-bobplugin-$(VERSION)-javadoc.jar \
+		bobplugin/target/check-cves-bobplugin-$(VERSION)-sources.jar \
+		cli/target/check-cves-cli.jar \
+		cli/target/check-cves-cli-$(VERSION)-javadoc.jar \
+		cli/target/check-cves-cli-$(VERSION)-sources.jar \
 		-F src/docs/releases/release-$(VERSION).txt
 	@$(INFO) "Tagging and pushing to github"
 	@git tag $(NAME)-$(VERSION)
