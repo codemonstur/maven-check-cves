@@ -150,7 +150,7 @@ public final class Main extends MavenRepoMojo {
 
     private void checkArtifacts(final Log log, final Set<Artifact> artifacts, final String type,
                                 final SeverityLevel threshold, final CacheConfig cacheConfig,
-                                final Findings findings) throws MojoFailureException, IOException {
+                                final Findings findings) throws IOException {
 
         // Phase 1: build the query bodies (local, sequential)
         final var queries = new ArrayList<Query>();
@@ -313,7 +313,7 @@ public final class Main extends MavenRepoMojo {
     }
 
     private void writeReport(final Log log, final String reportFormat, final int artifactsChecked,
-                             final Findings findings) throws MojoFailureException, IOException {
+                             final Findings findings) throws IOException {
         final var projectCoordinates =
                 project.getGroupId() + ":" + project.getArtifactId() + ":" + project.getVersion();
         if (reportFormat.equals("json")) {
