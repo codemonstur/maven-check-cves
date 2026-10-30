@@ -7,7 +7,9 @@ It binds to the `validate` phase by default, so a vulnerable dependency fails th
 build early — before compilation or packaging.
 
 See also [bobplugin-cvesearch](../../../tools/bobplugin-cvesearch/src/docs/README.md),
-the equivalent command-line/bob plugin that shares the same OSV.dev approach.
+the original bob plugin. Its features (suppressions, configurable output fields,
+`--failIfResults`, cache timeout) have now been ported into the
+`check-cves-bobplugin` module of this project, which is the maintained path.
 
 ## Usage
 
