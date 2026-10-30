@@ -6,9 +6,8 @@ A Maven plugin that checks project dependencies for known CVEs by querying the
 It binds to the `validate` phase by default, so a vulnerable dependency fails the
 build early — before compilation or packaging.
 
-See also [bobplugin-cvesearch](../../../tools/bobplugin-cvesearch/src/docs/README.md),
-the original bob plugin. Its features (suppressions, configurable output fields,
-`--failIfResults`, cache timeout) have now been ported into the
+The original `bobplugin-cvesearch` has been retired; its features (suppressions,
+configurable output fields, `--failIfResults`, cache timeout) now live in the
 `check-cves-bobplugin` module of this project, which is the maintained path.
 
 ## Usage
