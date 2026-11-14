@@ -4,13 +4,13 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +25,7 @@ public abstract class MavenRepoMojo extends AbstractMojo {
     public MavenProject project;
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     public MavenSession session;
-    @Component
+    @Inject
     public ProjectBuilder projectBuilder;
 
     protected Set<Artifact> loadCodeDependencies() {

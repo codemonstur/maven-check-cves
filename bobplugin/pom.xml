@@ -1,14 +1,6 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>            <maven.compiler.release>17</maven.compiler.release>
-            <!-- default for @{argLine}; jacoco's prepare-agent appends the agent when it runs -->
-        <argLine></argLine>
-            <version.plugin.jacoco>0.8.15</version.plugin.jacoco>
-            <version.plugin.surefire>3.6.0</version.plugin.surefire>
-            <version.library.cvss-calculator>1.4.2</version.library.cvss-calculator>
-    </properties>
-
     <parent>
         <groupId>com.github.codemonstur</groupId>
         <artifactId>check-cves-parent</artifactId>
@@ -21,6 +13,14 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Bob plugin for check-cves</description>
     <url>https://github.com/codemonstur/maven-check-cves</url>
+
+    <properties>            <maven.compiler.release>17</maven.compiler.release>
+            <!-- default for @{argLine}; jacoco's prepare-agent appends the agent when it runs -->
+        <argLine></argLine>
+            <version.plugin.jacoco>0.8.16</version.plugin.jacoco>
+            <version.plugin.surefire>3.6.1</version.plugin.surefire>
+            <version.library.cvss-calculator>1.5.1</version.library.cvss-calculator>
+    </properties>
 
     <dependencies>
 
